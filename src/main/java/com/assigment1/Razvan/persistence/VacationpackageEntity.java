@@ -2,9 +2,14 @@ package com.assigment1.Razvan.persistence;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "vacationpackage", schema = "sdassigment1")
+@Table(name = "vacationpackage", schema = "sdassigment1", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "ID")})
 public class VacationpackageEntity {
     private int id;
     private String name;
@@ -14,10 +19,13 @@ public class VacationpackageEntity {
     private Date endDate;
     private Integer slotsAvailable;
     private String destination;
+    //@ElementCollection(targetClass=UserEntity.class)
+    private Set<UserEntity> users;
 
     @Id
     @Basic
     @Column(name = "ID")
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public int getId() {
         return id;
     }
@@ -94,6 +102,15 @@ public class VacationpackageEntity {
 
     public void setDestination(String destination) {
         this.destination = destination;
+    }
+
+    @ManyToMany(mappedBy = "packages")
+    public Set<UserEntity> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserEntity> users) {
+        this.users = users;
     }
 
     @Override

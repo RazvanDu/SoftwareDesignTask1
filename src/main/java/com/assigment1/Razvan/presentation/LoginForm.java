@@ -1,10 +1,11 @@
 package com.assigment1.Razvan.presentation;
 
+import com.assigment1.Razvan.bussiness.UserService;
+import com.assigment1.Razvan.bussiness.VacationsService;
+import com.assigment1.Razvan.persistence.UserEntity;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class LoginForm {
@@ -16,14 +17,29 @@ public class LoginForm {
 
     private JFrame frame;
 
-    public LoginForm() {
-        frame = new JFrame("Food Delivery Management System");
+    public LoginForm(UserService userService, VacationsService vacationsService) {
+        frame = new JFrame("Login Page");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
         loginButton.addActionListener(e -> {
             String md5Hex = DigestUtils.md5Hex(Arrays.toString(passwordField.getPassword())).toUpperCase();
+            UserEntity userEntity = userService.findByName(usernameField.getText());
+            if(userEntity == null) {
+                JOptionPane.showMessageDialog(frame, "Invalid username!");
+                return;
+            }
+            if(!md5Hex.equals(userEntity.getHash())) {
+                JOptionPane.showMessageDialog(frame, "Invalid password!");
+                return;
+            }
+            new UserTravelsForm(vacationsService);
+            //JOptionPane.showMessageDialog(frame, "Success!");
+        });
+        registerButton.addActionListener(e -> {
+            new SignupForm(userService, vacationsService);
+            frame.dispose();
         });
     }
 

@@ -6,7 +6,7 @@
     <session-factory>
 
         <property name="hbm2ddl.auto">update</property>
-        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/sdassigment1</property>
         <property name="connection.username">root</property>
         <property name="connection.password">a1234</property>

@@ -1,12 +1,14 @@
 package com.assigment1.Razvan;
 
+import com.assigment1.Razvan.bussiness.UserService;
+import com.assigment1.Razvan.bussiness.VacationsService;
 import com.assigment1.Razvan.persistence.UserEntity;
+import com.assigment1.Razvan.persistence.VacationpackageEntity;
 import com.assigment1.Razvan.presentation.LoginForm;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import java.util.List;
 
 public class Main {
 
@@ -15,9 +17,18 @@ public class Main {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Assigment1");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        List<UserEntity> users = entityManager.createQuery("SELECT e FROM UserEntity e").getResultList();
+        UserService userService = new UserService(entityManager);
+        VacationsService vacationpackageService = new VacationsService(entityManager);
 
-        LoginForm f = new LoginForm();
+        new LoginForm(userService, vacationpackageService);
+
+        UserEntity user = userService.findByName("razvan");
+
+        for(VacationpackageEntity vacation : user.getPackages()) {
+            System.out.println(vacation.getName());
+        }
+
+        //System.out.println(user.getPackages().size());
 
     }
 }
