@@ -34,7 +34,9 @@ public class LoginForm {
                 JOptionPane.showMessageDialog(frame, "Invalid password!");
                 return;
             }
-            new UserTravelsForm(vacationsService);
+            UserEntity user = userService.findByName(usernameField.getText());
+            userService.setLoggedUser(user);
+            new UserTravelsForm(userService, vacationsService);
             //JOptionPane.showMessageDialog(frame, "Success!");
         });
         registerButton.addActionListener(e -> {

@@ -19,4 +19,18 @@ public class VacationpackageRepository {
         return vacations;
     }
 
+    public VacationpackageEntity findById(int id) {
+        List<VacationpackageEntity> users = entityManager.createQuery("SELECT e FROM VacationpackageEntity e WHERE e.id = '" + id + "'").getResultList();
+        if(users.size() == 0)
+            return null;
+        return users.get(0);
+    }
+
+    public void save(VacationpackageEntity vacationpackageEntity) {
+        entityManager.getTransaction().begin();
+        entityManager.persist(vacationpackageEntity);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+    }
+
 }

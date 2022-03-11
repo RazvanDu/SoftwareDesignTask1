@@ -1,16 +1,14 @@
 package com.assigment1.Razvan.persistence;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "destinations", schema = "sdassigment1", catalog = "")
+@Table(name = "destinations", schema = "sdassigment1")
 public class DestinationsEntity {
     private int id;
     private String name;
 
+    @Id
     @Basic
     @Column(name = "ID")
     public int getId() {

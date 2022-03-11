@@ -25,7 +25,6 @@ public class UserRepository {
     }
 
     public void save(UserEntity userEntity) {
-        Session session = entityManager.unwrap(Session.class);
         entityManager.getTransaction().begin();
         entityManager.persist(userEntity);
         entityManager.flush();

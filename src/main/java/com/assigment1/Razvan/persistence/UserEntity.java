@@ -13,14 +13,7 @@ public class UserEntity {
     private String email;
     private Integer type;
 
-    /*@ManyToMany(cascade = { CascadeType.ALL })
-//    @ElementCollection(targetClass=VacationpackageEntity.class)
-    @JoinTable(
-            name = "userpackages",
-            joinColumns = { @JoinColumn(name = "UserID", referencedColumnName = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "PackageID", referencedColumnName = "ID") }
-    )*/
-    private Set<VacationpackageEntity> packages;
+    private List<VacationpackageEntity> packages;
 
     public UserEntity(String name, String hash, String email, Integer type) {
         //this.id = new Random().nextInt();
@@ -87,24 +80,16 @@ public class UserEntity {
     }
 
     @ManyToMany(cascade = { CascadeType.ALL })
-//    @ElementCollection(targetClass=VacationpackageEntity.class)
     @JoinTable(
             name = "userpackages",
             joinColumns = { @JoinColumn(name = "UserID", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "PackageID", referencedColumnName = "ID") }
     )
-    public Set<VacationpackageEntity> getPackages() {
+    public List<VacationpackageEntity> getPackages() {
         return packages;
     }
 
-    /*@ManyToMany(cascade = { CascadeType.ALL })
-//    @ElementCollection(targetClass=VacationpackageEntity.class)
-    @JoinTable(
-            name = "userpackages",
-            joinColumns = { @JoinColumn(name = "UserID", referencedColumnName = "id") },
-            inverseJoinColumns = { @JoinColumn(name = "PackageID", referencedColumnName = "ID") }
-    )*/
-    public void setPackages(Set<VacationpackageEntity> packages) {
+    public void setPackages(List<VacationpackageEntity> packages) {
         this.packages = packages;
     }
 

@@ -1,6 +1,7 @@
 package com.assigment1.Razvan.persistence;
 
 import javax.persistence.*;
+import javax.print.attribute.standard.Destination;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,8 +18,9 @@ public class VacationpackageEntity {
     private String extraDetails;
     private Date startDate;
     private Date endDate;
+    private Integer totalSlots;
     private Integer slotsAvailable;
-    private String destination;
+    private DestinationsEntity destination;
     //@ElementCollection(targetClass=UserEntity.class)
     private Set<UserEntity> users;
 
@@ -95,12 +97,22 @@ public class VacationpackageEntity {
     }
 
     @Basic
-    @Column(name = "destination")
-    public String getDestination() {
+    @Column(name = "total_slots")
+    public Integer getTotalSlots() {
+        return totalSlots;
+    }
+
+    public void setTotalSlots(Integer totalSlots) {
+        this.totalSlots = totalSlots;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "destination")
+    public DestinationsEntity getDestination() {
         return destination;
     }
 
-    public void setDestination(String destination) {
+    public void setDestination(DestinationsEntity destination) {
         this.destination = destination;
     }
 
