@@ -1,5 +1,6 @@
 package com.assigment1.Razvan.presentation;
 
+import com.assigment1.Razvan.bussiness.DestinationService;
 import com.assigment1.Razvan.bussiness.UserService;
 import com.assigment1.Razvan.bussiness.VacationsService;
 import com.assigment1.Razvan.persistence.UserEntity;
@@ -17,7 +18,7 @@ public class LoginForm {
 
     private JFrame frame;
 
-    public LoginForm(UserService userService, VacationsService vacationsService) {
+    public LoginForm(UserService userService, VacationsService vacationsService, DestinationService destinationService) {
         frame = new JFrame("Login Page");
         frame.setContentPane(mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,11 +37,16 @@ public class LoginForm {
             }
             UserEntity user = userService.findByName(usernameField.getText());
             userService.setLoggedUser(user);
-            new UserTravelsForm(userService, vacationsService);
+            if(user.getType() == 0) {
+                new UserTravelsForm(userService, vacationsService);
+            } else {
+                new TravellingAgencyForm(userService, vacationsService, destinationService);
+            }
+            frame.dispose();
             //JOptionPane.showMessageDialog(frame, "Success!");
         });
         registerButton.addActionListener(e -> {
-            new SignupForm(userService, vacationsService);
+            new SignupForm(userService, vacationsService, destinationService);
             frame.dispose();
         });
     }

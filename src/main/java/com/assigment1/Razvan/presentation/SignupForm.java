@@ -1,5 +1,6 @@
 package com.assigment1.Razvan.presentation;
 
+import com.assigment1.Razvan.bussiness.DestinationService;
 import com.assigment1.Razvan.bussiness.VacationsService;
 import com.assigment1.Razvan.bussiness.UserService;
 import com.assigment1.Razvan.bussiness.VacationsService;
@@ -19,7 +20,7 @@ public class SignupForm {
     private UserService userService;
     private JFrame frame;
 
-    public SignupForm(UserService userService, VacationsService vacationsService) {
+    public SignupForm(UserService userService, VacationsService vacationsService, DestinationService destinationService) {
         this.userService = userService;
         frame = new JFrame("Signup Page");
         frame.setContentPane(mainPanel);
@@ -31,7 +32,7 @@ public class SignupForm {
             UserEntity userEntity = new UserEntity(nameField.getText(), md5Hex, emailField.getText(), 0);
             userService.save(userEntity);
             JOptionPane.showMessageDialog(frame, "Success!");
-            new LoginForm(userService, vacationsService);
+            new LoginForm(userService, vacationsService, destinationService);
             frame.dispose();
         });
     }

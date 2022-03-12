@@ -1,5 +1,6 @@
 package com.assigment1.Razvan;
 
+import com.assigment1.Razvan.bussiness.DestinationService;
 import com.assigment1.Razvan.bussiness.UserService;
 import com.assigment1.Razvan.bussiness.VacationsService;
 import com.assigment1.Razvan.persistence.UserEntity;
@@ -19,8 +20,9 @@ public class Main {
 
         UserService userService = new UserService(entityManager);
         VacationsService vacationpackageService = new VacationsService(entityManager);
+        DestinationService destinationService = new DestinationService(entityManager);
 
-        new LoginForm(userService, vacationpackageService);
+        new LoginForm(userService, vacationpackageService, destinationService);
 
         UserEntity user = userService.findByName("razvan");
 
