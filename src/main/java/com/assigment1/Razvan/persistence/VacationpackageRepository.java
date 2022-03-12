@@ -4,33 +4,36 @@ import com.assigment1.Razvan.persistence.UserEntity;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class VacationpackageRepository {
 
-    EntityManager entityManager;
+    EntityManagerFactory entityManagerFactory;
 
-    public VacationpackageRepository(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public VacationpackageRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     public List<VacationpackageEntity> getAll() {
-        List<VacationpackageEntity> vacations = entityManager.createQuery("SELECT e FROM VacationpackageEntity e").getResultList();
+        List<VacationpackageEntity> vacations = entityManagerFactory.createEntityManager().createQuery("SELECT e FROM VacationpackageEntity e").getResultList();
         return vacations;
     }
 
     public VacationpackageEntity findById(int id) {
-        List<VacationpackageEntity> users = entityManager.createQuery("SELECT e FROM VacationpackageEntity e WHERE e.id = '" + id + "'").getResultList();
+        List<VacationpackageEntity> users = entityManagerFactory.createEntityManager().createQuery("SELECT e FROM VacationpackageEntity e WHERE e.id = '" + id + "'").getResultList();
         if(users.size() == 0)
             return null;
         return users.get(0);
     }
 
     public void save(VacationpackageEntity vacationpackageEntity) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
-        entityManager.persist(vacationpackageEntity);
+        entityManager.merge(vacationpackageEntity);
         entityManager.flush();
         entityManager.getTransaction().commit();
+        entityManager.close();
     }
 
 }

@@ -7,7 +7,6 @@ import com.assigment1.Razvan.persistence.UserEntity;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
 import com.assigment1.Razvan.presentation.LoginForm;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
@@ -16,11 +15,10 @@ public class Main {
     public static void main(String[] args) {
 
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("Assigment1");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
-        UserService userService = new UserService(entityManager);
-        VacationsService vacationpackageService = new VacationsService(entityManager);
-        DestinationService destinationService = new DestinationService(entityManager);
+        UserService userService = new UserService(entityManagerFactory);
+        VacationsService vacationpackageService = new VacationsService(entityManagerFactory);
+        DestinationService destinationService = new DestinationService(entityManagerFactory);
 
         new LoginForm(userService, vacationpackageService, destinationService);
 

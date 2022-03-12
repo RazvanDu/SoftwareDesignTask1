@@ -5,15 +5,15 @@ import com.assigment1.Razvan.persistence.UserEntity;
 import com.assigment1.Razvan.persistence.DestinationRepository;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 public class DestinationService {
 
     DestinationRepository destinationRepository;
 
-    public DestinationService(EntityManager entityManager) {
-        this.destinationRepository = new DestinationRepository(entityManager);
+    public DestinationService(EntityManagerFactory entityManagerFactory) {
+        this.destinationRepository = new DestinationRepository(entityManagerFactory);
     }
 
     public DestinationsEntity findByName(String name) {

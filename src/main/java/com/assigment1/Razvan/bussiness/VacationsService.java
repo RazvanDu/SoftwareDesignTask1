@@ -5,7 +5,7 @@ import com.assigment1.Razvan.bussiness.UserService;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
 import com.assigment1.Razvan.persistence.VacationpackageRepository;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.time.temporal.ChronoUnit;
 import java.util.Comparator;
 import java.util.List;
@@ -15,8 +15,8 @@ public class VacationsService {
 
     VacationpackageRepository vacationpackageRepository;
 
-    public VacationsService(EntityManager entityManager) {
-        this.vacationpackageRepository = new VacationpackageRepository(entityManager);
+    public VacationsService(EntityManagerFactory entityManagerFactory) {
+        this.vacationpackageRepository = new VacationpackageRepository(entityManagerFactory);
     }
 
     public VacationpackageEntity byID(int id) {

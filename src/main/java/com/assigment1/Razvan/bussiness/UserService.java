@@ -4,7 +4,7 @@ import com.assigment1.Razvan.persistence.UserEntity;
 import com.assigment1.Razvan.persistence.UserRepository;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
 
-import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +14,8 @@ public class UserService {
 
     private UserEntity loggedUser;
 
-    public UserService(EntityManager entityManager) {
-        this.userRepository = new UserRepository(entityManager);
+    public UserService(EntityManagerFactory entityManagerFactory) {
+        this.userRepository = new UserRepository(entityManagerFactory);
     }
 
     public UserEntity findByName(String name) {
