@@ -1,4 +1,4 @@
-package com.assigment1.Razvan;
+package com.assigment1.Razvan.bussiness;
 
 import com.assigment1.Razvan.bussiness.DestinationService;
 import com.assigment1.Razvan.bussiness.UserService;
