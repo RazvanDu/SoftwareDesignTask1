@@ -1,13 +1,7 @@
 package com.assigment1.Razvan.persistence;
 
-import com.assigment1.Razvan.bussiness.BookStatus;
-
 import javax.persistence.*;
-import javax.print.attribute.standard.Destination;
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
