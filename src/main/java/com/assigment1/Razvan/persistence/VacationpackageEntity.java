@@ -1,5 +1,7 @@
 package com.assigment1.Razvan.persistence;
 
+import com.assigment1.Razvan.bussiness.BookStatus;
+
 import javax.persistence.*;
 import javax.print.attribute.standard.Destination;
 import java.sql.Date;
@@ -14,7 +16,7 @@ import java.util.Set;
 public class VacationpackageEntity {
     private int id;
     private String name;
-    private Integer price;
+    private Float price;
     private String extraDetails;
     private Date startDate;
     private Date endDate;
@@ -48,11 +50,11 @@ public class VacationpackageEntity {
 
     @Basic
     @Column(name = "price")
-    public Integer getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
 
@@ -123,6 +125,14 @@ public class VacationpackageEntity {
 
     public void setUsers(Set<UserEntity> users) {
         this.users = users;
+    }
+
+    public BookStatus bookStatus() {
+        if(getSlotsAvailable() == 0)
+            return BookStatus.BOOKED;
+        if(getSlotsAvailable() == getTotalSlots())
+            return BookStatus.NOT_BOOKED;
+        return BookStatus.IN_PROGRESS;
     }
 
     @Override

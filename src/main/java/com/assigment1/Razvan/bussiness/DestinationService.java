@@ -19,4 +19,17 @@ public class DestinationService {
     public DestinationsEntity findByName(String name) {
         return destinationRepository.findByName(name);
     }
+
+    public List<DestinationsEntity> getAll() {
+        return destinationRepository.getAll();
+    }
+
+    public void save(DestinationsEntity destinationsEntity) {
+        destinationRepository.save(destinationsEntity);
+    }
+
+    public void delete(DestinationsEntity destinationsEntity) {
+        destinationRepository.delete(destinationsEntity);
+    }
+
 }

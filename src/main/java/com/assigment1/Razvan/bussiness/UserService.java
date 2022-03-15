@@ -22,6 +22,10 @@ public class UserService {
         return userRepository.findByName(name);
     }
 
+    public UserEntity findById(int id) {
+        return userRepository.findById(id);
+    }
+
     public void save(UserEntity userEntity) {
         userRepository.save(userEntity);
     }
@@ -36,5 +40,10 @@ public class UserService {
 
     public void setLoggedUser(UserEntity loggedUser) {
         this.loggedUser = loggedUser;
+    }
+
+
+    public UserEntity addVacation(UserEntity userEntity, VacationpackageEntity vacationpackageEntity) {
+        return userRepository.addVacation(userEntity, vacationpackageEntity);
     }
 }

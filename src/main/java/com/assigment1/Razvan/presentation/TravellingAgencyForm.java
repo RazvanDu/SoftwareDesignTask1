@@ -25,6 +25,11 @@ public class TravellingAgencyForm {
     private JButton chooseButton;
     private JTable chosenVacation;
     private JButton updateButton;
+    private JTextField destinationText;
+    private JTable destinationsTable;
+    private JButton addDestination;
+    private JButton deleteButton;
+    private JButton deleteButton1;
     private JFrame frame;
     private VacationsService vacationsService;
     private UserService userService;
@@ -42,25 +47,22 @@ public class TravellingAgencyForm {
         frame.setSize(1000, 400);
         updateTable(vacationsService.byDestination(""));
         updateChosen(null);
+        updateDestinations();
         chooseButton.addActionListener(e -> {
             int id;
             try {
                 id = Integer.parseInt(vacationID.getText());
             } catch(Exception exp) {
-                JOptionPane.showMessageDialog(frame, "Invalid destination!");
+                JOptionPane.showMessageDialog(frame, "Invalid vacation!");
                 return;
             }
             if(id < 0) {
-                JOptionPane.showMessageDialog(frame, "Invalid destination!");
+                JOptionPane.showMessageDialog(frame, "Invalid vacation!");
                 return;
             }
             VacationpackageEntity vacation = vacationsService.byID(id);
             if(vacation == null) {
-                JOptionPane.showMessageDialog(frame, "Invalid destination!");
-                return;
-            }
-            if(vacation.getSlotsAvailable() == 0) {
-                JOptionPane.showMessageDialog(frame, "The destination is already fully booked!");
+                JOptionPane.showMessageDialog(frame, "Invalid vacation!");
                 return;
             }
             updateChosen(vacation);
@@ -89,6 +91,44 @@ public class TravellingAgencyForm {
             updateTable(vacationsService.byDestination(""));
             JOptionPane.showMessageDialog(frame, "Successfully updated the vacation!");
         });
+        addDestination.addActionListener(e -> {
+            DestinationsEntity destinationsEntity = new DestinationsEntity();
+            String destinationName = destinationText.getText();
+            destinationsEntity.setName(destinationName);
+            destinationService.save(destinationsEntity);
+            updateDestinations();
+            JOptionPane.showMessageDialog(frame, "Successfully added the destination!");
+        });
+        deleteButton.addActionListener(e -> {
+            String destinationName = destinationText.getText();
+            DestinationsEntity destinationsEntity = destinationService.findByName(destinationName);
+            if(destinationsEntity == null) {
+                JOptionPane.showMessageDialog(frame, "That is not a valid destination!");
+                return;
+            }
+            destinationService.delete(destinationsEntity);
+            updateDestinations();
+            updateTable(vacationsService.byDestination(""));
+            JOptionPane.showMessageDialog(frame, "Successfully removed the destination!");
+        });
+        deleteButton1.addActionListener(e -> {
+            int id;
+            try {
+                id = Integer.parseInt(vacationID.getText());
+            } catch(Exception exp) {
+                JOptionPane.showMessageDialog(frame, "Invalid vacation!");
+                return;
+            }
+            if(id < 0) {
+                JOptionPane.showMessageDialog(frame, "Invalid vacation!");
+                return;
+            }
+            VacationpackageEntity vacation = vacationsService.byID(id);
+            vacationsService.delete(vacation);
+            updateDestinations();
+            updateTable(vacationsService.byDestination(""));
+            JOptionPane.showMessageDialog(frame, "Successfully removed the vacation!");
+        });
     }
 
     public void addChosen() {
@@ -104,10 +144,16 @@ public class TravellingAgencyForm {
         return Integer.parseInt((String) object);
     }
 
+    public Float objToFloat(Object object) {
+        if(object instanceof Integer)
+            return (Float) object;
+        return Float.parseFloat((String) object);
+    }
+
     public VacationpackageEntity extractVacation() {
         VacationpackageEntity vacation = new VacationpackageEntity();
         vacation.setName((String) chosenVacation.getValueAt(0, 1));
-        vacation.setPrice(objToInt(chosenVacation.getValueAt(0, 2)));
+        vacation.setPrice(objToFloat(chosenVacation.getValueAt(0, 2)));
         try {
             vacation.setStartDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse((String) chosenVacation.getValueAt(0, 3)).getTime()));
             vacation.setEndDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse((String) chosenVacation.getValueAt(0, 4)).getTime()));
@@ -136,17 +182,17 @@ public class TravellingAgencyForm {
 
     public void updateChosen(VacationpackageEntity vacationpackageEntity) {
 
-        updateGeneric(Arrays.asList(vacationpackageEntity), chosenVacation);
+        updateGeneric(Arrays.asList(vacationpackageEntity), chosenVacation, false);
 
     }
 
     public void updateTable(List<VacationpackageEntity> vacationpackageEntities) {
 
-        updateGeneric(vacationpackageEntities, packagesTable);
+        updateGeneric(vacationpackageEntities, packagesTable, true);
 
     }
 
-    private void updateGeneric(List<VacationpackageEntity> vacations, JTable bookedTable) {
+    private void updateGeneric(List<VacationpackageEntity> vacations, JTable bookedTable, boolean extra) {
 
         if(vacations == null)
             vacations = new ArrayList<>();
@@ -156,15 +202,35 @@ public class TravellingAgencyForm {
         model.setColumnCount(0);
         model.setRowCount(0);
 
-        model.setColumnIdentifiers(Arrays.asList("Id", "Name", "Price", "Start Date", "End Date", "Slots Total", "Slots Left", "Destination", "Details").toArray());
+        List<String> temp = new ArrayList<>(Arrays.asList("Id", "Name", "Price", "Start Date", "End Date", "Slots Total", "Slots Left", "Destination", "Details"));
+        if(extra)
+            temp.add("Book status");
+
+        model.setColumnIdentifiers(temp.toArray());
         for (VacationpackageEntity vacationpackageEntity : vacations) {
             if(vacationpackageEntity == null) {
                 model.addRow(Arrays.asList("-", "-", "-", "-", "-", "-", "-", "-", "-").toArray());
                 continue;
             }
-            model.addRow(Arrays.asList(vacationpackageEntity.getId(), vacationpackageEntity.getName(), vacationpackageEntity.getPrice(),
-                    vacationpackageEntity.getStartDate().toString(), vacationpackageEntity.getEndDate().toString(), vacationpackageEntity.getTotalSlots(),
-                    vacationpackageEntity.getSlotsAvailable(), vacationpackageEntity.getDestination().getName(), vacationpackageEntity.getExtraDetails()).toArray());
+            List<String> temp2 = new ArrayList<>(Arrays.asList(String.valueOf(vacationpackageEntity.getId()), vacationpackageEntity.getName(), String.valueOf(vacationpackageEntity.getPrice()),
+                    vacationpackageEntity.getStartDate().toString(), vacationpackageEntity.getEndDate().toString(), String.valueOf(vacationpackageEntity.getTotalSlots()),
+                    String.valueOf(vacationpackageEntity.getSlotsAvailable()), vacationpackageEntity.getDestination().getName(), vacationpackageEntity.getExtraDetails()));
+            if(extra)
+                temp2.add(vacationpackageEntity.bookStatus().toString());
+            model.addRow(temp2.toArray());
+        }
+
+    }
+    private void updateDestinations() {
+
+        DefaultTableModel model = (DefaultTableModel) destinationsTable.getModel();
+
+        model.setColumnCount(0);
+        model.setRowCount(0);
+
+        model.setColumnIdentifiers(Arrays.asList("Id", "Destination").toArray());
+        for (DestinationsEntity destinationsEntity : destinationService.getAll()) {
+            model.addRow(Arrays.asList(destinationsEntity.getId(), destinationsEntity.getName()).toArray());
         }
 
     }

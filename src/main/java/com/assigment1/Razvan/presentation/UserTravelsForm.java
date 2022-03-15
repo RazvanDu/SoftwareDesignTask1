@@ -2,6 +2,7 @@ package com.assigment1.Razvan.presentation;
 
 import com.assigment1.Razvan.bussiness.UserService;
 import com.assigment1.Razvan.bussiness.VacationsService;
+import com.assigment1.Razvan.persistence.UserEntity;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
 
 import javax.swing.*;
@@ -11,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserTravelsForm {
     private JPanel mainPanel;
@@ -87,10 +89,13 @@ public class UserTravelsForm {
                 JOptionPane.showMessageDialog(frame, "The destination is already fully booked!");
                 return;
             }
-            userService.getLoggedUser().getPackages().add(vacation);
+            //UserEntity targetUser = userService.findById(userService.getLoggedUser().getId());
+            //List<VacationpackageEntity> packages = new ArrayList<>(userService.getLoggedUser().getPackages());
+            //packages.add(vacation);
+            //userService.getLoggedUser().setPackages(packages);
             vacation.setSlotsAvailable(vacation.getSlotsAvailable() - 1);
-            userService.save(userService.getLoggedUser());
             vacationsService.save(vacation);
+            userService.setLoggedUser(userService.addVacation(userService.getLoggedUser(), vacation));
             updateTable(vacationsService.byDestination(""));
             updateBooked();
         });
@@ -98,7 +103,7 @@ public class UserTravelsForm {
 
     public void updateTable(List<VacationpackageEntity> vacations) {
 
-        updateGeneric(vacations, travelsTable);
+        updateGeneric(vacations.stream().filter(vacation -> vacation.getSlotsAvailable() != 0).collect(Collectors.toList()), travelsTable);
 
     }
 

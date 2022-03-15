@@ -79,7 +79,7 @@ public class UserEntity {
         this.type = type;
     }
 
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(
             name = "userpackages",
             joinColumns = { @JoinColumn(name = "UserID", referencedColumnName = "id") },

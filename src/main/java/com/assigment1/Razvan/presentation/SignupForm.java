@@ -30,7 +30,12 @@ public class SignupForm {
         signupButton.addActionListener(e -> {
             String md5Hex = DigestUtils.md5Hex(Arrays.toString(passwordField.getPassword())).toUpperCase();
             UserEntity userEntity = new UserEntity(nameField.getText(), md5Hex, emailField.getText(), 0);
-            userService.save(userEntity);
+            try {
+                userService.save(userEntity);
+            } catch(Exception exp) {
+                JOptionPane.showMessageDialog(frame, "Invalid username or email!");
+                return;
+            }
             JOptionPane.showMessageDialog(frame, "Success!");
             new LoginForm(userService, vacationsService, destinationService);
             frame.dispose();

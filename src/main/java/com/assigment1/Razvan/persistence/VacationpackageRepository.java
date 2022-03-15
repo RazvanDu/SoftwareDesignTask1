@@ -36,4 +36,14 @@ public class VacationpackageRepository {
         entityManager.close();
     }
 
+    public void delete(VacationpackageEntity vacationpackageEntity) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        VacationpackageEntity actualTarget = entityManager.find(VacationpackageEntity.class, vacationpackageEntity.getId());
+        entityManager.getTransaction().begin();
+        entityManager.remove(actualTarget);
+        entityManager.flush();
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+
 }

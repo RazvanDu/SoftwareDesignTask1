@@ -1,5 +1,6 @@
 package com.assigment1.Razvan.bussiness;
 
+import com.assigment1.Razvan.persistence.DestinationsEntity;
 import com.assigment1.Razvan.persistence.UserEntity;
 import com.assigment1.Razvan.bussiness.UserService;
 import com.assigment1.Razvan.persistence.VacationpackageEntity;
@@ -42,6 +43,10 @@ public class VacationsService {
 
     public void save(VacationpackageEntity vacationpackageEntity) {
         vacationpackageRepository.save(vacationpackageEntity);
+    }
+
+    public void delete(VacationpackageEntity vacationpackageEntity) {
+        vacationpackageRepository.delete(vacationpackageEntity);
     }
 
 }
